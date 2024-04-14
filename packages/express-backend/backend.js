@@ -36,7 +36,7 @@ const users = {
   };
   
   const findUserById = (id) =>
-  users["users_list"].find((user) => user["id"] === id);
+    users["users_list"].find((user) => user["id"] === id);
 
   app.get("/users/:id", (req, res) => {
     const id = req.params["id"]; //or req.params.id
@@ -46,6 +46,17 @@ const users = {
     } else {
       res.send(result);
     }
+  });
+
+  const addUser = (user) => {
+    users["users_list"].push(user);
+    return user;
+  };
+
+  app.post("/users", (req, res) => {
+    const userToAdd = req.body;
+    addUser(userToAdd);
+    res.send();
   });
 
   app.listen(port, () => {
