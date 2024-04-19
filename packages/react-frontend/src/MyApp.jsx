@@ -6,29 +6,63 @@ import Form from "./Form";
 function MyApp() {
   const [characters, setCharacters] = useState([]);
 
-  function updateList(person) {
-    setCharacters([...characters, person]);
-    
-  }
 
-  function fetchUsers(){
+  function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");
     return promise;
   }
 
   useEffect(() => {
     fetchUsers()
-              .then((res) => res.json())
-              .then((json) => setCharacters(json["users_list"]))
-              .catch((error) => {console.log(error); });
+      .then((res) => res.json())
+      .then((json) => setCharacters(json["users_list"]))  
+      .catch((error) => { console.log(error); });
   }, [] );
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
+  function postUser(person) {
+    const promise = fetch("Http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(person),
     });
-    setCharacters(updated);
+
+    return promise;
   }
+/*
+  function updateList(person) { 
+    postUser(person)
+      .then(() => setCharacters([...characters, person]))
+      .catch((error) => {
+        console.log(error);
+      })
+}
+*/
+
+function updateList(person) { 
+  postUser(person)
+      .then(response => {
+          if (response.status === 201) {
+              return response.json(); 
+          } else {
+              throw Error(`Failed to post, Err: ${response.status}`);
+          }
+      })
+      .then(savedPerson => {
+          setCharacters(prevCharacters => [...prevCharacters, savedPerson]);
+      })
+      .catch(error => {
+          console.log('Err:', error);
+      });
+    }
+
+    function removeOneCharacter(index) {
+      const updated = characters.filter((character, i) => {
+        return i !== index;
+      });
+      setCharacters(updated);
+    }
 
   return (
     
