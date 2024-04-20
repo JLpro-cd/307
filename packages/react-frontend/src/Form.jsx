@@ -8,15 +8,15 @@ function Form(props) {
   });
 
   function handleChange(event) {
-    const { name, value } = event.target;
+    const { name, value} = event.target;
     if (name === "job")
-      setPerson({ name: person["name"], job: value });
-    else setPerson({ name: value, job: person["job"] });
+      setPerson({ name: person["name"], job: value});
+    else setPerson({ name: value, job: person["job"]});
   }
 
   function submitForm() {
     props.handleSubmit(person);
-    setPerson({ name: "", job: "" });
+    setPerson({ name: "", job: "" , id: ""});
   }
 
   return (
@@ -26,7 +26,7 @@ function Form(props) {
       <input
         type="text"
         name="name"
-        id="name"
+        id="name.within"
         value={person.name}
         onChange={handleChange}
       />
@@ -34,7 +34,7 @@ function Form(props) {
       <input
         type="text"
         name="job"
-        id="job"
+        id="job.within"
         value={person.job}
         onChange={handleChange}
       />
