@@ -58,10 +58,25 @@ function updateList(person) {
     }
 
     function removeOneCharacter(index) {
-      const updated = characters.filter((character, i) => {
-        return i !== index;
-      });
+      const idx = characters[index];
+      const updated = characters.filter((character, i) => i !== index);
       setCharacters(updated);
+      const promise = fetch(`Http://localhost:8000/users/${idx.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }).then(response => {
+      if (response.status === 204) {
+        console.log('Successful deletion')
+      } else {
+        console.log('Failed to delete');
+        setCharacters(characters); // rolling back i think
+      }
+    }).catch(error => {
+      console.log('Err:', error);
+      setCharacters(characters);
+    })
     }
 
   return (

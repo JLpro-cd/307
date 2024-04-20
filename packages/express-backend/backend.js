@@ -40,8 +40,8 @@ const users = {
   const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
-/*app.get("/users/:id", (req, res) => {
-  const id = req.params["id"]; //or req.params.id
+app.get("/users/:id", (req, res) => {
+  const id = req.params["id"];
   let result = findUserById(id);
   if (result === undefined) {
     res.status(404).send("Resource not found.");
@@ -49,11 +49,12 @@ const users = {
     res.send(result);
   }
 });
-*/
+
 
   app.get("/users", (req, res) =>{
     res.status(200).json(users)
   });
+
 
   const addUser = (user) => {
     users["users_list"].push(user);
@@ -62,9 +63,20 @@ const users = {
 
   app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    userToAdd.id = Math.random().toString(36);
+    userToAdd.id = Math.random().toString(10).substr(2, 6);
     const addedUser = addUser(userToAdd);
     res.status(201).json(addedUser)
+  });
+
+  app.delete("/users/:id", (req, res) => {
+    const identifier = req.params.id;
+    const index = users.users_list.findIndex(user => user.id === identifier);
+    if (index !== -1) {
+      users.users_list.splice(index, 1);
+      res.status(204).send("Successful delete");
+    } else {
+      res.status(404).send("Resource not found");
+    }
   });
 
   app.listen(port, () => {
