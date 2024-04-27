@@ -15,7 +15,7 @@ function MyApp() {
   useEffect(() => {
     fetchUsers()
       .then((res) => res.json())
-      .then((json) => setCharacters(json["users_list"]))  
+      .then(data => setCharacters(data))  
       .catch((error) => { console.log(error); });
   }, [] );
 
@@ -59,9 +59,7 @@ function updateList(person) {
 
     function removeOneCharacter(index) {
       const idx = characters[index];
-      const updated = characters.filter((character, i) => i !== index);
-      setCharacters(updated);
-      const promise = fetch(`Http://localhost:8000/users/${idx.id}`, {
+      const promise = fetch(`Http://localhost:8000/users/${idx._id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -69,13 +67,15 @@ function updateList(person) {
     }).then(response => {
       if (response.status === 204) {
         console.log('Successful deletion')
+        const updated = characters.filter((character, i) => i !== index);
+        setCharacters(updated);
       } else {
         console.log('Failed to delete');
-        setCharacters(characters); // rolling back i think
+        //setCharacters(characters); // rolling back i think
       }
     }).catch(error => {
       console.log('Err:', error);
-      setCharacters(characters);
+      //setCharacters(characters);
     })
     }
 

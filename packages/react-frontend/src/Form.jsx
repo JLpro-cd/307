@@ -16,7 +16,7 @@ function Form(props) {
 
   function submitForm() {
     props.handleSubmit(person);
-    setPerson({ name: "", job: "" , id: ""});
+    setPerson({ name: "", job: "" });
   }
 
   return (
@@ -26,7 +26,7 @@ function Form(props) {
       <input
         type="text"
         name="name"
-        id="name.within"
+        _id="name.within"
         value={person.name}
         onChange={handleChange}
       />
@@ -34,7 +34,7 @@ function Form(props) {
       <input
         type="text"
         name="job"
-        id="job.within"
+        _id="job.within"
         value={person.job}
         onChange={handleChange}
       />
